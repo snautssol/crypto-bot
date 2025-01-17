@@ -1,9 +1,10 @@
+import os
 import requests
 from telegram import Update, Bot
 from telegram.ext import CallbackContext, Dispatcher, CommandHandler
 
 # Reemplaza 'YOUR TELEGRAM TOKEN HERE' con tu token
-TELEGRAM_API_TOKEN = ''
+TELEGRAM_API_TOKEN = os.getenv('TELEGRAM_API_TOKEN', '')
 bot = Bot(token=TELEGRAM_API_TOKEN)
 dispatcher = Dispatcher(bot, None, workers=0)
 
