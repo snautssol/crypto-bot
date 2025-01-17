@@ -19,6 +19,10 @@ def get_crypto_price(symbol):
 
 def alert(update: Update, context: CallbackContext):
     try:
+        if len(context.args) != 2:
+            update.message.reply_text('Error: Usa el formato /alert nombreactivo valor.')
+            return
+
         crypto, value = context.args
         value = float(value)
         chat_id = update.effective_chat.id
@@ -31,7 +35,7 @@ def alert(update: Update, context: CallbackContext):
         update.message.reply_text(f'Alerta configurada para {crypto} a {value} USD')
     
     except ValueError:
-        update.message.reply_text('Error: Usa el comando /alert seguido del nombre del activo y el valor.')
+        update.message.reply_text('Error: Asegúrate de ingresar un número válido para el valor.')
 
 def check_alerts(context: CallbackContext):
     for chat_id in alerts:
@@ -41,6 +45,11 @@ def check_alerts(context: CallbackContext):
                 context.bot.send_message(chat_id=chat_id, text=f'¡Alerta! {crypto} alcanzó los {value} USD.')
                 alerts[chat_id].remove((crypto, value))
 
+# Añade la función start y el manejador del comando /start
+def start(update: Update, context: CallbackContext):
+    update.message.reply_text('¡Hola! Estoy listo para alertarte sobre precios de criptomonedas. Usa /alert nombreactivo valor para configurar una alerta.')
+
+dispatcher.add_handler(CommandHandler('start', start))
 dispatcher.add_handler(CommandHandler('alert', alert))
 
 # Esta función será llamada por Vercel
@@ -58,4 +67,4 @@ def run_check_alerts():
         time.sleep(60)
 
 threading.Thread(target=run_check_alerts).start()
-  
+    
