@@ -1,12 +1,11 @@
 import os
 import requests
 from telegram import Update, Bot
-from telegram.ext import CallbackContext, Dispatcher, CommandHandler
+from telegram.ext import CommandHandler, CallbackContext, Application
 
 # Reemplaza 'YOUR TELEGRAM TOKEN HERE' con tu token
 TELEGRAM_API_TOKEN = os.getenv('TELEGRAM_API_TOKEN', '')
-bot = Bot(token=TELEGRAM_API_TOKEN)
-dispatcher = Dispatcher(bot, None, workers=0)
+application = Application.builder().token(TELEGRAM_API_TOKEN).build()
 
 # Diccionario para almacenar las alertas
 alerts = {}
@@ -49,8 +48,8 @@ def check_alerts(context: CallbackContext):
 def start(update: Update, context: CallbackContext):
     update.message.reply_text('¡Hola! Estoy listo para alertarte sobre precios de criptomonedas. Usa /alert nombreactivo valor para configurar una alerta.')
 
-dispatcher.add_handler(CommandHandler('start', start))
-dispatcher.add_handler(CommandHandler('alert', alert))
+application.add_handler(CommandHandler('start', start))
+application.add_handler(CommandHandler('alert', alert))
 
 # Esta función será llamada por Vercel
 def main_handler(event, context):
@@ -67,4 +66,7 @@ def run_check_alerts():
         time.sleep(60)
 
 threading.Thread(target=run_check_alerts).start()
+
+# Inicia la aplicación
+application.run_polling()
     
