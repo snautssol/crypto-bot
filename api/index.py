@@ -1,11 +1,11 @@
 import os
 import requests
 from telegram import Update, Bot
-from telegram.ext import CommandHandler, CallbackContext, Application
+from telegram.ext import CommandHandler, CallbackContext, ApplicationBuilder
 
 # Reemplaza 'YOUR TELEGRAM TOKEN HERE' con tu token
 TELEGRAM_API_TOKEN = os.getenv('TELEGRAM_API_TOKEN', '')
-application = Application.builder().token(TELEGRAM_API_TOKEN).build()
+application = ApplicationBuilder().token(TELEGRAM_API_TOKEN).build()
 
 # Diccionario para almacenar las alertas
 alerts = {}
@@ -69,4 +69,3 @@ threading.Thread(target=run_check_alerts).start()
 
 # Inicia la aplicación
 application.run_polling()
-    
