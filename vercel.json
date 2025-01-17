@@ -1,11 +1,12 @@
 {
   "version": 2,
   "builds": [
-    { "src": "api/index.py", "use": "@vercel/python" }
+    { "src": "api/main.py", "use": "@vercel/python" }
   ],
   "routes": [
     { "src": "/favicon.png", "status": 404 },
-    { "src": "/", "dest": "/api/index.py" },
-    { "src": "/(.*)", "dest": "/api/index.py" }
+    { "src": "/favicon.ico", "status": 404 },
+    { "src": "/", "dest": "/api/main.py" },
+    { "src": "/(.*)", "dest": "/api/main.py" }
   ]
 }
